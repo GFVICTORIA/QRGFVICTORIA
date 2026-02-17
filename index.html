@@ -1,22 +1,35 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html>
+<!DOCTYPE html>
+<html lang="es">
 <head>
-	<meta http-equiv="content-type" content="text/html; charset=windows-1252"/>
-	<title>Selecciona idioma</title>
-	<meta name="generator" content="LibreOffice 7.0.0.3 (Windows)"/>
-	<meta name="created" content="00:00:00"/>
-	<meta name="changed" content="00:00:00"/>
-	<meta name="" content=""/>
-	<style type="text/css">
-		h1 { text-align: center }
-		h1.cjk { font-family: "Arial", sans-serif }
-		h1.ctl { font-family: "Arial", sans-serif }
-		p { font-family: "Arial", sans-serif; text-align: center }
-	</style>
+  <meta charset="UTF-8">
+  <title>Selecciona idioma</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 100px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
 </head>
-<body lang="es-ES" dir="ltr"><h1 class="western">Selecciona tu idioma
-/ Select your language / W&auml;hle deine Sprache</h1>
-<p>Espa&ntilde;ol English Deutsch 
-</p>
+<body>
+  <h1>Selecciona tu idioma / Select your language / Wähle deine Sprache</h1>
+  <button onclick="window.location.href='documento_es.pdf'">Español</button>
+  <button onclick="window.location.href='documento_en.pdf'">English</button>
+  <button onclick="window.location.href='documento_de.pdf'">Deutsch</button>
+
+  <script>
+    // Detección automática del idioma del navegador
+    const lang = navigator.language || navigator.userLanguage;
+    if(lang.startsWith('es')) window.location.href = 'documento_es.pdf';
+    else if(lang.startsWith('en')) window.location.href = 'documento_en.pdf';
+    else if(lang.startsWith('de')) window.location.href = 'documento_de.pdf';
+    // Si el idioma no es ninguno de los anteriores, se queda en la página para elegir manualmente
+  </script>
 </body>
 </html>
