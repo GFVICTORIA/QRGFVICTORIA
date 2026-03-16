@@ -2,21 +2,50 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Selector de Idioma y PDF</title>
+<title>Selector de Idioma y PDFs</title>
 <style>
     body {
-        text-align: center;
         font-family: Arial, sans-serif;
-        margin-top: 50px;
+        text-align: center;
+        margin: 50px;
+        background-color: #f0f4f8;
     }
     h1 {
-        margin-bottom: 40px;
+        margin-bottom: 30px;
     }
-    button, select {
-        padding: 10px 20px;
+    .language-btn {
+        padding: 12px 24px;
         margin: 10px;
         font-size: 16px;
         cursor: pointer;
+        border: none;
+        border-radius: 6px;
+        background-color: #007bff;
+        color: white;
+        transition: background 0.3s;
+    }
+    .language-btn:hover {
+        background-color: #0056b3;
+    }
+    .pdf-list {
+        margin-top: 40px;
+        display: none;
+    }
+    .pdf-btn {
+        display: block;
+        padding: 10px 20px;
+        margin: 10px auto;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        background-color: #28a745;
+        color: white;
+        width: 200px;
+        transition: background 0.3s;
+    }
+    .pdf-btn:hover {
+        background-color: #1e7e34;
     }
 </style>
 </head>
@@ -25,74 +54,47 @@
 <h1>Select language / Selecciona idioma / Sprache wählen</h1>
 
 <!-- Botones de idioma -->
-<button onclick="selectLanguage('es')">Español</button>
-<button onclick="selectLanguage('en')">English</button>
-<button onclick="selectLanguage('de')">Deutsch</button>
+<button class="language-btn" onclick="selectLanguage('es')">Español</button>
+<button class="language-btn" onclick="selectLanguage('en')">English</button>
+<button class="language-btn" onclick="selectLanguage('de')">Deutsch</button>
 
-<!-- Selector de PDFs adicionales -->
-<div id="pdfSection" style="margin-top:30px; display:none;">
-    <label for="pdfSelect">Selecciona PDF adicional:</label>
-    <select id="pdfSelect">
-        <option value="">--Seleccione PDF--</option>
-    </select>
-    <br>
-    <button onclick="openPDF()">Abrir PDF</button>
-</div>
+<!-- Lista de PDFs según idioma -->
+<div class="pdf-list" id="pdfList"></div>
 
 <script>
-    // PDFs según idioma
+    // PDFs por idioma
     const pdfData = {
         es: {
-            Barcos: "pdfs/es/barcos.pdf",
-            Actividades en el agua: "pdfs/es/actividades en el agua.pdf",
-            Fondos marinos: "pdfs/es/fondos marinos.pdf"
+            "Documento Principal": "pdfs/es/documento_es.pdf",
+            "barcos": "pdfs/es/barcos.pdf",
+            "actividades en el agua": "pdfs/es/actividades en el agua.pdf",
+            "fondos marinos": "pdfs/es/fondos marinos.pdf"
         },
         en: {
-            water: "pdfs/en/water.pdf",
-            earth: "pdfs/en/earth.pdf",
-            air: "pdfs/en/air.pdf"
+            "Main Document": "pdfs/en/documento_en.pdf",
+            "Water": "pdfs/en/water.pdf",
+            "Earth": "pdfs/en/earth.pdf",
+            "Air": "pdfs/en/air.pdf"
         },
         de: {
-            wasser: "pdfs/de/wasser.pdf",
-            erde: "pdfs/de/erde.pdf",
-            luft: "pdfs/de/luft.pdf"
+            "Hauptdokument": "pdfs/de/documento_de.pdf",
+            "Wasser": "pdfs/de/wasser.pdf",
+            "Erde": "pdfs/de/erde.pdf",
+            "Luft": "pdfs/de/luft.pdf"
         }
     };
 
-    let selectedLang = "";
-
     function selectLanguage(lang) {
-        selectedLang = lang;
-        // Mostrar el selector de PDFs adicionales
-        const pdfSection = document.getElementById("pdfSection");
-        pdfSection.style.display = "block";
+        const pdfListDiv = document.getElementById("pdfList");
+        pdfListDiv.innerHTML = ''; // limpiar
+        pdfListDiv.style.display = "block";
 
-        // Rellenar el selector con PDFs según idioma
-        const pdfSelect = document.getElementById("pdfSelect");
-        pdfSelect.innerHTML = '<option value="">--Seleccione PDF--</option>';
-        for (const key in pdfData[lang]) {
-            const option = document.createElement("option");
-            option.value = pdfData[lang][key];
-            option.textContent = key.charAt(0).toUpperCase() + key.slice(1);
-            pdfSelect.appendChild(option);
-        }
-
-        // Abrir el PDF principal de idioma
-        const mainPdf = {
-            es: "pdfs/es/documento_es.pdf",
-            en: "pdfs/en/documento_en.pdf",
-            de: "pdfs/de/documento_de.pdf"
-        };
-        window.open(mainPdf[lang], "_blank");
-    }
-
-    function openPDF() {
-        const pdfSelect = document.getElementById("pdfSelect");
-        const pdfUrl = pdfSelect.value;
-        if (pdfUrl) {
-            window.open(pdfUrl, "_blank");
-        } else {
-            alert("Por favor selecciona un PDF.");
+        for (const [name, url] of Object.entries(pdfData[lang])) {
+            const btn = document.createElement("button");
+            btn.textContent = name;
+            btn.className = "pdf-btn";
+            btn.onclick = () => window.open(url, "_blank");
+            pdfListDiv.appendChild(btn);
         }
     }
 </script>
