@@ -1,175 +1,107 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GF Victoria - Selector de Actividades</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Roboto:wght@300;400&display=swap');
-
-        body {
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            /* Degradado sutil que imita el fondo de la imagen */
-            background: radial-gradient(circle at center, rgba(210, 230, 240, 0.6) 0%, rgba(255, 255, 255, 1) 100%);
-            font-family: 'Roboto', sans-serif;
-            color: #1a1a1a;
-        }
-
-        .container {
-            text-align: center;
-            width: 100%;
-            max-width: 600px;
-            padding: 20px;
-        }
-
-        h1 {
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
-            font-weight: 400;
-            font-size: 1.8rem;
-            margin-bottom: 50px;
-            color: #333;
-        }
-
-        .languages {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-
-        .lang-item {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: opacity 0.3s;
-        }
-
-        .lang-item:hover {
-            opacity: 0.7;
-        }
-
-        .dot {
-            height: 10px;
-            width: 10px;
-            background-color: #a01a33; /* Color granate/vinotinto */
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-
-        .lang-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        /* Lista de PDFs */
-        .pdf-list {
-            display: none;
-            margin-top: 20px;
-            animation: fadeIn 0.6s ease;
-        }
-
-        .pdf-item {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
-            margin: 12px 0;
-            cursor: pointer;
-            color: #1a1a1a;
-            text-decoration: none;
-            display: block;
-            transition: color 0.2s;
-        }
-
-        .pdf-item:hover {
-            color: #a01a33;
-        }
-
-        .footer {
-            margin-top: 60px;
-        }
-
-        .footer-logo {
-            width: 180px;
-            height: auto;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Selector de Idioma y PDFs</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 50px;
+        background-color: #f0f4f8;
+    }
+    h1 {
+        margin-bottom: 30px;
+    }
+    .language-btn {
+        padding: 12px 24px;
+        margin: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        border-radius: 6px;
+        background-color: #007bff;
+        color: white;
+        transition: background 0.3s;
+    }
+    .language-btn:hover {
+        background-color: #0056b3;
+    }
+    .pdf-list {
+        margin-top: 40px;
+        display: none;
+    }
+    .pdf-btn {
+        display: block;
+        padding: 10px 20px;
+        margin: 10px auto;
+        font-size: 16px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        background-color: #28a745;
+        color: white;
+        width: 200px;
+        transition: background 0.3s;
+    }
+    .pdf-btn:hover {
+        background-color: #1e7e34;
+    }
+</style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Select language / Selecciona idioma / Sprache wählen</h1>
+<h1>Select language / Selecciona idioma / Sprache wählen</h1>
 
-    <div class="languages">
-        <div class="lang-item" onclick="selectLanguage('en')">
-            <div class="dot"></div><span class="lang-text">ENGLISH</span>
-        </div>
-        <div class="lang-item" onclick="selectLanguage('es')">
-            <div class="dot"></div><span class="lang-text">ESPAÑOL</span>
-        </div>
-        <div class="lang-item" onclick="selectLanguage('de')">
-            <div class="dot"></div><span class="lang-text">DEUTSCH</span>
-        </div>
-    </div>
+<!-- Botones de idioma -->
+<button class="language-btn" onclick="selectLanguage('es')">Español</button>
+<button class="language-btn" onclick="selectLanguage('en')">English</button>
+<button class="language-btn" onclick="selectLanguage('de')">Deutsch</button>
 
-    <div id="pdfList" class="pdf-list"></div>
-
-    <div class="footer">
-        <img src="https://gfhoteles.com/wp-content/uploads/2021/05/logo-gf-victoria.png" alt="GF Victoria" class="footer-logo">
-    </div>
-</div>
+<!-- Lista de PDFs según idioma -->
+<div class="pdf-list" id="pdfList"></div>
 
 <script>
+    // PDFs por idioma
     const pdfData = {
         es: {
-            "Actividades en el agua": "actividades en el agua.pdf",
-            "Actividades Terrestres": "actividades terrestre.pdf",
-            "Barcos": "barcos.pdf",
-            "Cielos": "CIELOS.pdf"
+            "INFORMACIÓN GENERAL": "general.pdf",
+            "BARCOS": "barcos.pdf",
+            "ACTIVIDADES - AGUA": "actividades en el agua.pdf",
+            "FONDOS MARINOS": "fondos marinos.pdf",
+            "ACTIVIDADES - TIERRA": "actividades terrestre.pdf",
+            "ACTIVIDADES - AIRE": "CIELOS.pdf",
         },
         en: {
-            "Water Activities": "water_activities.pdf",
-            "Land Activities": "land_activities.pdf",
-            "Boats": "boats.pdf",
-            "Skies": "skies.pdf"
+            "Main Document": "pdfs/en/documento_en.pdf",
+            "Water": "pdfs/en/water.pdf",
+            "Earth": "pdfs/en/earth.pdf",
+            "Air": "pdfs/en/air.pdf"
         },
         de: {
-            "Wasseraktivitäten": "wasser.pdf",
-            "Landaktivitäten": "land.pdf",
-            "Boote": "boote.pdf",
-            "Himmel": "himmel.pdf"
+            "Hauptdokument": "pdfs/de/documento_de.pdf",
+            "Wasser": "pdfs/de/wasser.pdf",
+            "Erde": "pdfs/de/erde.pdf",
+            "Luft": "pdfs/de/luft.pdf"
         }
     };
 
     function selectLanguage(lang) {
-        const listDiv = document.getElementById("pdfList");
-        listDiv.innerHTML = ''; 
-        listDiv.style.display = "block";
+        const pdfListDiv = document.getElementById("pdfList");
+        pdfListDiv.innerHTML = ''; // limpiar
+        pdfListDiv.style.display = "block";
 
-        // Creamos los enlaces dinámicamente
         for (const [name, url] of Object.entries(pdfData[lang])) {
-            const link = document.createElement("a");
-            link.href = url;
-            link.target = "_blank";
-            link.className = "pdf-item";
-            link.textContent = name;
-            listDiv.appendChild(link);
+            const btn = document.createElement("button");
+            btn.textContent = name;
+            btn.className = "pdf-btn";
+            btn.onclick = () => window.open(url, "_blank");
+            pdfListDiv.appendChild(btn);
         }
     }
 </script>
 
 </body>
 </html>
+
+
