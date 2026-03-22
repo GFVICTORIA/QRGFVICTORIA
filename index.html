@@ -2,106 +2,149 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Selector de Idioma y PDFs</title>
+<title>GF Victoria - Actividades</title>
+
 <style>
-    body {
-        font-family: Arial, sans-serif;
-        text-align: center;
-        margin: 50px;
-        background-color: #f0f4f8;
-    }
-    h1 {
-        margin-bottom: 30px;
-    }
-    .language-btn {
-        padding: 12px 24px;
-        margin: 10px;
-        font-size: 16px;
-        cursor: pointer;
-        border: none;
-        border-radius: 6px;
-        background-color: #007bff;
-        color: white;
-        transition: background 0.3s;
-    }
-    .language-btn:hover {
-        background-color: #0056b3;
-    }
-    .pdf-list {
-        margin-top: 40px;
-        display: none;
-    }
-    .pdf-btn {
-        display: block;
-        padding: 10px 20px;
-        margin: 10px auto;
-        font-size: 16px;
-        cursor: pointer;
-        border: none;
-        border-radius: 5px;
-        background-color: #28a745;
-        color: white;
-        width: 200px;
-        transition: background 0.3s;
-    }
-    .pdf-btn:hover {
-        background-color: #1e7e34;
-    }
+
+body{
+    margin:0;
+    font-family: "Times New Roman", serif;
+    text-align:center;
+    background-image: url("fondo.jpg"); /* pon aquí tu imagen */
+    background-size: cover;
+    background-position: center;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+h1{
+    font-style: italic;
+    font-size:40px;
+    margin-bottom:40px;
+}
+
+.languages{
+    display:flex;
+    gap:80px;
+    margin-bottom:30px;
+}
+
+.language-btn{
+    font-size:36px;
+    color:#c4002f;
+    border:none;
+    background:none;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.language-btn:hover{
+    opacity:0.7;
+}
+
+.pdf-list{
+    margin-top:20px;
+}
+
+.pdf-btn{
+    display:block;
+    margin:10px auto;
+    padding:12px 30px;
+    font-size:20px;
+    border:none;
+    border-radius:8px;
+    background-color:rgba(0,0,0,0.7);
+    color:white;
+    cursor:pointer;
+}
+
+.pdf-btn:hover{
+    background-color:black;
+}
+
+.logo{
+    position:absolute;
+    bottom:30px;
+    font-size:20px;
+    font-weight:bold;
+}
+
 </style>
 </head>
+
 <body>
 
 <h1>Select language / Selecciona idioma / Sprache wählen</h1>
 
-<!-- Botones de idioma -->
-<button class="language-btn" onclick="selectLanguage('es')">Español</button>
-<button class="language-btn" onclick="selectLanguage('en')">English</button>
-<button class="language-btn" onclick="selectLanguage('de')">Deutsch</button>
+<div class="languages">
 
-<!-- Lista de PDFs según idioma -->
+<button class="language-btn" onclick="selectLanguage('en')">• ENGLISH</button>
+<button class="language-btn" onclick="selectLanguage('es')">• ESPAÑOL</button>
+<button class="language-btn" onclick="selectLanguage('de')">• DEUTSCH</button>
+
+</div>
+
 <div class="pdf-list" id="pdfList"></div>
 
+<div class="logo">GF VICTORIA</div>
+
 <script>
-    // PDFs por idioma
-    const pdfData = {
-        es: {
-            "INFORMACIÓN GENERAL": "general.pdf",
-            "BARCOS": "barcos.pdf",
-            "ACTIVIDADES - AGUA": "actividades en el agua.pdf",
-            "FONDOS MARINOS": "fondos marinos.pdf",
-            "ACTIVIDADES - TIERRA": "actividades terrestre.pdf",
-            "ACTIVIDADES - AIRE": "CIELOS.pdf",
-        },
-        en: {
-            "Main Document": "pdfs/en/documento_en.pdf",
-            "Water": "pdfs/en/water.pdf",
-            "Earth": "pdfs/en/earth.pdf",
-            "Air": "pdfs/en/air.pdf"
-        },
-        de: {
-            "Hauptdokument": "pdfs/de/documento_de.pdf",
-            "Wasser": "pdfs/de/wasser.pdf",
-            "Erde": "pdfs/de/erde.pdf",
-            "Luft": "pdfs/de/luft.pdf"
-        }
-    };
 
-    function selectLanguage(lang) {
-        const pdfListDiv = document.getElementById("pdfList");
-        pdfListDiv.innerHTML = ''; // limpiar
-        pdfListDiv.style.display = "block";
+const pdfData = {
 
-        for (const [name, url] of Object.entries(pdfData[lang])) {
-            const btn = document.createElement("button");
-            btn.textContent = name;
-            btn.className = "pdf-btn";
-            btn.onclick = () => window.open(url, "_blank");
-            pdfListDiv.appendChild(btn);
-        }
-    }
+es: {
+"INFORMACIÓN GENERAL": "general.pdf",
+"BARCOS": "barcos.pdf",
+"ACTIVIDADES EN EL AGUA": "actividades_agua.pdf",
+"FONDOS MARINOS": "fondos_marinos.pdf",
+"ACTIVIDADES TERRESTRES": "actividades_tierra.pdf",
+"CIELOS": "cielos.pdf"
+},
+
+en: {
+"GENERAL INFORMATION": "pdfs/en/general.pdf",
+"BOATS": "pdfs/en/boats.pdf",
+"WATER ACTIVITIES": "pdfs/en/water.pdf",
+"SEA LIFE": "pdfs/en/sealife.pdf",
+"LAND ACTIVITIES": "pdfs/en/land.pdf",
+"SKY": "pdfs/en/sky.pdf"
+},
+
+de: {
+"ALLGEMEINE INFORMATION": "pdfs/de/general.pdf",
+"BOOTE": "pdfs/de/boats.pdf",
+"WASSER AKTIVITÄTEN": "pdfs/de/water.pdf",
+"MEERESBODEN": "pdfs/de/sea.pdf",
+"LAND AKTIVITÄTEN": "pdfs/de/land.pdf",
+"HIMMEL": "pdfs/de/sky.pdf"
+}
+
+};
+
+function selectLanguage(lang){
+
+const list = document.getElementById("pdfList");
+list.innerHTML = "";
+
+for (const [name,url] of Object.entries(pdfData[lang])){
+
+const btn = document.createElement("button");
+
+btn.className="pdf-btn";
+btn.textContent=name;
+
+btn.onclick=()=>window.open(url,"_blank");
+
+list.appendChild(btn);
+
+}
+
+}
+
 </script>
 
 </body>
 </html>
-
-
