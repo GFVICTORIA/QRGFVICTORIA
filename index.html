@@ -2,74 +2,101 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>GF Victoria - Actividades</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GF Victoria - Guest Experience</title>
 
 <style>
 
-body{
+*{
     margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
     font-family: "Times New Roman", serif;
-    text-align:center;
     background-image: url("fondo qr3.jpg");
     background-size: cover;
     background-position: center;
-    height:100vh;
+    min-height:100vh;
     display:flex;
-    flex-direction:column;
     justify-content:center;
     align-items:center;
+    text-align:center;
+    color:white;
+    position:relative;
+}
+
+.overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,0.45);
+}
+
+.container{
+    position:relative;
+    z-index:2;
+    width:90%;
+    max-width:700px;
 }
 
 h1{
-    font-style: italic;
-    font-size:40px;
-    margin-bottom:40px;
+    font-size:48px;
+    font-style:italic;
+    margin-bottom:50px;
+    text-shadow:0 2px 10px rgba(0,0,0,0.6);
 }
 
-.languages{
+.menu{
     display:flex;
-    gap:80px;
-    margin-bottom:30px;
+    flex-direction:column;
+    gap:18px;
 }
 
-.language-btn{
-    font-size:36px;
-    color:#c4002f;
+button{
+    padding:16px 25px;
     border:none;
-    background:none;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-.language-btn:hover{
-    opacity:0.7;
-}
-
-.pdf-list{
-    margin-top:20px;
-}
-
-.pdf-btn{
-    display:block;
-    margin:10px auto;
-    padding:12px 30px;
-    font-size:20px;
-    border:none;
-    border-radius:8px;
-    background-color:rgba(0,0,0,0.7);
+    border-radius:14px;
+    background:rgba(0,0,0,0.65);
     color:white;
+    font-size:22px;
     cursor:pointer;
+    transition:0.3s;
+    backdrop-filter: blur(4px);
 }
 
-.pdf-btn:hover{
-    background-color:black;
+button:hover{
+    transform:scale(1.03);
+    background:rgba(0,0,0,0.85);
+}
+
+.back-btn{
+    margin-top:25px;
+    background:#a0002c;
+}
+
+.hidden{
+    display:none;
 }
 
 .logo{
-    position:absolute;
-    bottom:30px;
-    font-size:20px;
-    font-weight:bold;
+    margin-top:40px;
+    font-size:18px;
+    letter-spacing:2px;
+}
+
+@media(max-width:768px){
+
+h1{
+    font-size:34px;
+}
+
+button{
+    font-size:18px;
+    padding:14px;
+}
+
 }
 
 </style>
@@ -77,75 +104,196 @@ h1{
 
 <body>
 
-<h1>Select language / Selecciona idioma / Sprache wählen</h1>
+<div class="overlay"></div>
 
-<div class="languages">
+<div class="container">
 
-<button class="language-btn" onclick="selectLanguage('en')">• ENGLISH</button>
-<button class="language-btn" onclick="selectLanguage('es')">• ESPAÑOL</button>
-<button class="language-btn" onclick="selectLanguage('de')">• DEUTSCH</button>
+    <h1 id="title">Select Language / Selecciona idioma</h1>
+
+    <!-- IDIOMAS -->
+    <div id="languageMenu" class="menu">
+
+        <button onclick="showMainMenu('es')">ESPAÑOL</button>
+        <button onclick="showMainMenu('en')">ENGLISH</button>
+
+    </div>
+
+    <!-- MENU PRINCIPAL -->
+    <div id="mainMenu" class="menu hidden"></div>
+
+    <!-- SUBMENU -->
+    <div id="subMenu" class="menu hidden"></div>
+
+    <div class="logo">GF VICTORIA</div>
 
 </div>
 
-<div class="pdf-list" id="pdfList"></div>
-
-
 <script>
 
-const pdfData = {
+let currentLang = "es";
+
+const content = {
 
 es: {
-"INFORMACIÓN GENERAL": "general.pdf",
-"BARCOS": "barcos.pdf",
-"ACTIVIDADES EN EL AGUA": "actividades en el agua.pdf",
-"FONDOS MARINOS": "fondos marinos.pdf",
-"ACTIVIDADES TERRESTRES": "actividades terrestre.pdf",
-"CIELOS": "CIELOS.pdf",
-"PARA TODA LA FAMILIA": "familia.pdf",
-"OCIO NOCTURNO": "nocturno 2.pdf"
+
+main: [
+    { name:"Excursiones", action:"excursiones" },
+    { name:"Traslados", pdf:"traslados.pdf" },
+    { name:"Complementos de estancia", action:"extras" },
+    { name:"Rent a car", pdf:"rentacar.pdf" }
+],
+
+excursiones: [
+    { name:"Lo más vendido del mes", pdf:"mas-vendido.pdf" },
+    { name:"Información general", pdf:"general.pdf" },
+    { name:"Barcos", pdf:"barcos.pdf" },
+    { name:"Actividades en el agua", pdf:"agua.pdf" },
+    { name:"Actividades terrestres", pdf:"terrestres.pdf" },
+    { name:"Fondos Marinos", pdf:"fondos.pdf" },
+    { name:"Cielos", pdf:"cielos.pdf" },
+    { name:"Para toda la familia", pdf:"familia.pdf" },
+    { name:"Espectáculos", pdf:"shows.pdf" }
+],
+
+extras: [
+    { name:"Paquete de Cumpleaños", pdf:"cumpleanos.pdf" },
+    { name:"Paquete Romántico", pdf:"romantico.pdf" },
+    { name:"Accesorios de bebé", pdf:"bebe.pdf" }
+]
+
 },
 
 en: {
-"GENERAL INFORMATION": "general.pdf",
-"BOATS": "barcos.pdf",
-"WATER ACTIVITIES": "actividades en el agua.pdf",
-"SEA LIFE": "fondos marinos.pdf",
-"LAND ACTIVITIES": "actividades terrestre.pdf",
-"SKY": "CIELOS.pdf",
-"FOR THE WHOLE FAMILY": "familia.pdf",
-"NIGHTLIFE": "nocturno 2.pdf"
-},
 
-de: {
-"ALLGEMEINE INFORMATION": "generalA.pdf",
-"BOOTE": "BARCO A  .pdf",
-"WASSERAKTIVITÄTEN": "AGUA A.pdf",
-"MEERESBODEN": "FONDOS A.pdf",
-"LAND AKTIVITÄTEN": "TERRESTRE A.pdf",
-"HIMMEL": "CIELOS A.pdf",
-"FÜR DIE GANZE FAMILIE": "FAMILIA A.pdf",
-"NACHTLEBEN": "NOCHE A.pdf"
+main: [
+    { name:"Excursions", action:"excursiones" },
+    { name:"Transfers", pdf:"transfers.pdf" },
+    { name:"Stay Complements", action:"extras" },
+    { name:"Rent a car", pdf:"rentacar-en.pdf" }
+],
+
+excursiones: [
+    { name:"Best sellers of the month", pdf:"best-sellers.pdf" },
+    { name:"General Information", pdf:"general-en.pdf" },
+    { name:"Boats", pdf:"boats.pdf" },
+    { name:"Water Activities", pdf:"water.pdf" },
+    { name:"Land Activities", pdf:"land.pdf" },
+    { name:"Sea Life", pdf:"sealife.pdf" },
+    { name:"Sky", pdf:"sky.pdf" },
+    { name:"For the whole family", pdf:"family.pdf" },
+    { name:"Shows", pdf:"shows-en.pdf" }
+],
+
+extras: [
+    { name:"Birthday Package", pdf:"birthday.pdf" },
+    { name:"Romantic Package", pdf:"romantic.pdf" },
+    { name:"Baby Accessories", pdf:"baby.pdf" }
+]
+
 }
 
 };
 
-function selectLanguage(lang){
+function showMainMenu(lang){
 
-const list = document.getElementById("pdfList");
-list.innerHTML = "";
+    currentLang = lang;
 
-for (const [name,url] of Object.entries(pdfData[lang])){
+    document.getElementById("languageMenu").classList.add("hidden");
 
-const btn = document.createElement("button");
+    const menu = document.getElementById("mainMenu");
 
-btn.className="pdf-btn";
-btn.textContent=name;
+    menu.innerHTML = "";
 
-btn.onclick=()=>window.open(url,"_blank");
+    content[lang].main.forEach(item => {
 
-list.appendChild(btn);
+        const btn = document.createElement("button");
+
+        btn.textContent = item.name;
+
+        if(item.pdf){
+
+            btn.onclick = () => {
+                window.open(item.pdf, "_blank");
+            };
+
+        } else {
+
+            btn.onclick = () => {
+                showSubMenu(item.action);
+            };
+
+        }
+
+        menu.appendChild(btn);
+
+    });
+
+    const back = document.createElement("button");
+    back.textContent = "← Volver";
+    back.className = "back-btn";
+
+    if(lang === "en"){
+        back.textContent = "← Back";
+    }
+
+    back.onclick = goHome;
+
+    menu.appendChild(back);
+
+    menu.classList.remove("hidden");
 
 }
+
+function showSubMenu(type){
+
+    document.getElementById("mainMenu").classList.add("hidden");
+
+    const sub = document.getElementById("subMenu");
+
+    sub.innerHTML = "";
+
+    content[currentLang][type].forEach(item => {
+
+        const btn = document.createElement("button");
+
+        btn.textContent = item.name;
+
+        btn.onclick = () => {
+            window.open(item.pdf, "_blank");
+        };
+
+        sub.appendChild(btn);
+
+    });
+
+    const back = document.createElement("button");
+
+    back.className = "back-btn";
+
+    if(currentLang === "es"){
+        back.textContent = "← Volver";
+    }else{
+        back.textContent = "← Back";
+    }
+
+    back.onclick = () => {
+
+        sub.classList.add("hidden");
+        document.getElementById("mainMenu").classList.remove("hidden");
+
+    };
+
+    sub.appendChild(back);
+
+    sub.classList.remove("hidden");
+
+}
+
+function goHome(){
+
+    document.getElementById("mainMenu").classList.add("hidden");
+    document.getElementById("subMenu").classList.add("hidden");
+    document.getElementById("languageMenu").classList.remove("hidden");
 
 }
 
